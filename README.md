@@ -28,8 +28,11 @@ sys_user表中，设计有一列为sex（性别），这一列保存的是是1�
 
 ### 引入maven依赖
 
-```java
-暂未申请将该工具项目发布到maven，敬请期待
+ <dependency>
+        <groupId>org.kakahu.dict</groupId>
+        <artifactId>util</artifactId>
+        <version>1.0-SNAPSHOT</version>
+ </dependency>
 ```
 
 ### 代码修改
@@ -104,3 +107,4 @@ public class DictConfig implements DictCustomConfig {
 ```
 
 **注意：**实现`DictCustomConfig`接口的类必须要使用`@Configuration`注解修饰
+特别鸣谢https://github.com/simple-mine/util
