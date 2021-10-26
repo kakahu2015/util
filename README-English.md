@@ -28,7 +28,7 @@ The value of sex saved in the library table is 1 or 2, but in the data returned 
 ## Instructions for use
 
 ### Introduce maven dependency
-
+```
  <dependency>
         <groupId>org.kakahu.dict</groupId>
         <artifactId>util</artifactId>
