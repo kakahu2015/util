@@ -1,14 +1,15 @@
-# 字典翻译工具类
+# A simple java dictionary translation tool class
 
-## 背景
+## Introduction
 
-在我们开发的时候，会有可能遇到将一些代码值转译成中文的场景，库表中会存在一个字典表，记录着对应的代码值和中文翻译，如下图（该表的表名为dict）：
+When we are developing, there may be scenarios where some code values are translated into Chinese. There will be a dictionary table in the library table, which records the corresponding code values and Chinese translation, 
+as shown in the figure below (the table name is dict)：
 
 ![image-20211020154224837](src/main/resources/image/dict.png)
 
 ![image-20211020152005035](src/main/resources/image/dict_data.png)
 
-而我们的用户表（举例），设计如下（表名为sys_user）：
+And our user table (for example), the design is as follows (table name is sys_user):
 
 <img src="src/main/resources/image/sys_user.png" alt="image-20211020154359187" style="zoom:80%;" />
 
@@ -16,31 +17,34 @@
 
 
 
-sys_user表中，设计有一列为sex（性别），这一列保存的是是1或2的值，而这个值对应的是dict表中的SEX_TYPE类型的字典数据，dict表中描述了代码值对应的中文翻译
+In the sys_user table, a column is designed as sex (gender), this column holds the value of 1 or 2, and this value corresponds to the dictionary data of the SEX_TYPE type in the dict table, and the dict table describes the corresponding code value Chinese translation
 
-而我们在后端代码查询到对应的用户信息返回给前端的时候，需要对sex这个字段进行翻译，即将代码值（1或2）翻译成对应的中文，如下图所示：
+When we query the corresponding user information in the back-end code and return it to the front-end, we need to translate the sex field, that is, translate the code value (1 or 2) into the corresponding Chinese, as shown in the following figure:
 
 ![image-20211020154938242](src/main/resources/image/util_postman.png)
 
-库表中保存的sex的值是1或2，但是返回前端的数据中，sex的值是中文的翻译
+The value of sex saved in the library table is 1 or 2, but in the data returned to the front end, the value of sex is the Chinese translation
 
-## 使用说明
+## Instructions for use
 
-### 引入maven依赖
+### Introduce maven dependency
 
-```java
-暂未申请将该工具项目发布到maven，敬请期待
+ <dependency>
+        <groupId>org.kakahu.dict</groupId>
+        <artifactId>util</artifactId>
+        <version>1.0-SNAPSHOT</version>
+ </dependency>
 ```
 
-### 代码修改
+### java code
 
-在**controller**类的方法上声明`@DictSensible`注解即可
+Just declare the `@DictSensible` annotation on the method of the **controller** class
 
 ![image-20211020155247006](src/main/resources/image/util_code.png)
 
-#### `@DictSensible` 注解说明
+#### `@DictSensible` annotation description
 
-具体代码请自行翻看源码
+Please check the source code for the specific code
 
 | 字段名           | 含义                                       | 是否必须                     |
 | ---------------- | ------------------------------------------ | ---------------------------- |
@@ -54,9 +58,9 @@ sys_user表中，设计有一列为sex（性别），这一列保存的是是1�
 | statusValue      | 字典表中状态的值                           | 如果有statusFileName，则必须 |
 | toField          | 翻译后放在实体类的字段，为空则放在代码字段 | 否                           |
 
-#### 自定义翻译说明
+#### Custom translation instructions
 
-目前版本保留了`DictCustomConfig`接口，该接口中定义了三个方法（具体代码请自行翻看源码）
+The current version retains the `DictCustomConfig` interface, which defines three methods (please check the source code for the specific code)
 
 | 方法名            | 入参                     | 返回值                  | 说明                                                         |
 | ----------------- | ------------------------ | ----------------------- | ------------------------------------------------------------ |
@@ -64,7 +68,7 @@ sys_user表中，设计有一列为sex（性别），这一列保存的是是1�
 | getLableInChinese | DictSensiblesBean.class  | String.class            | 自定义翻译，这里会传入一个DictSensiblesBean.class，包含initDictConfig方法中设置的值和注解上设置的值，可自定义进行翻译。如果不想自定义翻译，该工具会自动翻译。自定义翻译的优先级高于自动翻译，如果实现了自定义翻译，将不会进行自动翻译。**推荐使用自定义翻译** |
 | getData           | Object.class             | List.class              | 这里会传入返回的对象，目前自动解析`com.baomidou.mybatisplus.core.metadata.IPage`和`com.baomidou.mybatisplus.extension.api.R`两种类型的返回对象，对于其他类型的返回对象，需要自己在这个方法进行解析，获取到需要翻译的List |
 
-#### DictSensiblesBean.class说明
+#### DictSensiblesBean.class description
 
 | 字段名           | 含义                                       |
 | ---------------- | ------------------------------------------ |
@@ -78,7 +82,7 @@ sys_user表中，设计有一列为sex（性别），这一列保存的是是1�
 | statusValue      | 字典表中状态的值                           |
 | toField          | 翻译后放在实体类的字段，为空则放在代码字段 |
 
-#### 实现`DictCustomConfig`的demo
+#### Implement the demo of `DictCustomConfig`
 
 ```java
 @Configuration
@@ -92,6 +96,7 @@ public class DictConfig implements DictCustomConfig {
     @Override
     public String getLableInChinese(DictSensiblesBean dict) {
         //自行翻译，如不需要自定义翻译，请直接返回null
+		//Line translation, if you don’t need custom translation, please return null directly
         return null;
     }
 
@@ -103,4 +108,5 @@ public class DictConfig implements DictCustomConfig {
 }
 ```
 
-**注意：** 实现`DictCustomConfig`接口的类必须要使用`@Configuration`注解修饰
+**Note:** The class that implements the `DictCustomConfig` interface must be decorated with the `@Configuration` annotation
+Special thanks to https://github.com/simple-mine/util
