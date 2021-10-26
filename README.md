@@ -27,7 +27,7 @@ sys_user表中，设计有一列为sex（性别），这一列保存的是是1�
 ## 使用说明
 
 ### 引入maven依赖
-
+```
  <dependency>
         <groupId>org.kakahu.dict</groupId>
         <artifactId>util</artifactId>
